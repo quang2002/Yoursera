@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+    "name": "Yoursera",
+    "description": "A chrome extension to help you do coursera courses",
+    "version": "0.0.1",
+    "icons": {},
+    "action": {
+        "default_title": "Yoursera"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "storage"
+    ],
+    "host_permissions": [
+        "https://www.coursera.org/*"
+    ],
+    "background": {
+        "service_worker": "service-worker.js"
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "scripts/do-quiz.js"
+            ],
+            "matches": [
+                "https://www.coursera.org/learn/*/attempt"
+            ]
+        }
+    ],
+    "externally_connectable": {
+        "matches": [
+            "https://www.coursera.org/*"
+        ]
+    }
+}

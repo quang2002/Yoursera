@@ -1,7 +1,7 @@
 chrome.action.onClicked.addListener(() => {
     try {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, { action: "do-quiz" });
+            chrome.tabs.sendMessage(tabs[0].id, {});
         });
     } catch {
 

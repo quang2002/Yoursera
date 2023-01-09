@@ -26,11 +26,14 @@
             "matches": [
                 "https://www.coursera.org/learn/*/attempt"
             ]
+        },
+        {
+            "js": [
+                "scripts/export-quiz.js"
+            ],
+            "matches": [
+                "https://www.coursera.org/learn/*/view-attempt"
+            ]
         }
-    ],
-    "externally_connectable": {
-        "matches": [
-            "https://www.coursera.org/*"
-        ]
-    }
+    ]
 }

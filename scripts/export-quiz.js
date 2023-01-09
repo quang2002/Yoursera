@@ -1,9 +1,6 @@
 async function getCourseInformation() {
     const info = JSON.parse(document.querySelector("a[data-click-value]").getAttribute('data-click-value'));
-    const promises = new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ action: "get-answer", course_id: info.course_id }, resolve);
-    });
-    return { ...info, answers: await promises };
+    return info;
 }
 
 function analysisQuiz(quiz) {
@@ -15,6 +12,7 @@ function analysisQuiz(quiz) {
         answers.push({
             text: answer.querySelector(".rc-Option__input-text").innerText,
             input: answer.querySelector("input"),
+            isCorrect: answer.querySelector("input").checked
         });
     });
 
@@ -26,24 +24,28 @@ function analysisQuiz(quiz) {
     return { id, question, answers, type };
 }
 
-async function doQuiz() {
-    const { course_id: courseId, answers: courseAnswers } = await getCourseInformation();
+function saveFileJson(filename, data) {
+    const url = window.webkitURL || window.URL || window.mozURL || window.msURL;
+    const a = document.createElement('a');
+    a.download = filename + '.json';
+    a.href = url.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    a.click();
+}
+
+async function exportQuiz() {
+    const result = {};
+    const { course_id: courseId } = await getCourseInformation();
     const quizzes = document.querySelectorAll("#TUNNELVISIONWRAPPER_CONTENT_ID .rc-FormPartsQuestion");
 
     quizzes.forEach(quiz => {
         const { id, question, answers, type } = analysisQuiz(quiz);
 
-        const quizAnswers = courseAnswers[id];
-        if (!quizAnswers) return;
-
-        answers.forEach(answer => {
-            if (quizAnswers.includes(answer.text)) {
-                answer.input.click();
-            }
-        });
+        result[id] = answers.filter(e => e.isCorrect).map(e => e.text);
     });
+
+    saveFileJson(courseId, result);
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    doQuiz();
+    exportQuiz();
 });

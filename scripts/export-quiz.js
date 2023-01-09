@@ -34,16 +34,16 @@ function saveFileJson(filename, data) {
 
 async function exportQuiz() {
     const result = {};
-    const { course_id: courseId } = await getCourseInformation();
+    const { course_id: courseId, item_id: itemId } = await getCourseInformation();
     const quizzes = document.querySelectorAll("#TUNNELVISIONWRAPPER_CONTENT_ID .rc-FormPartsQuestion");
 
     quizzes.forEach(quiz => {
-        const { id, question, answers, type } = analysisQuiz(quiz);
+        const { id, answers } = analysisQuiz(quiz);
 
         result[id] = answers.filter(e => e.isCorrect).map(e => e.text);
     });
 
-    saveFileJson(courseId, result);
+    saveFileJson(`${courseId}.${itemId}`, result);
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

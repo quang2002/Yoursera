@@ -1,7 +1,7 @@
 async function getCourseInformation() {
     const info = JSON.parse(document.querySelector("a[data-click-value]").getAttribute('data-click-value'));
     const promises = new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ action: "get-answer", course_id: info.course_id }, resolve);
+        chrome.runtime.sendMessage({ action: "get-answer", course_id: info.course_id, item_id: info.item_id }, resolve);
     });
     return { ...info, answers: await promises };
 }
@@ -27,11 +27,11 @@ function analysisQuiz(quiz) {
 }
 
 async function doQuiz() {
-    const { course_id: courseId, answers: courseAnswers } = await getCourseInformation();
+    const { answers: courseAnswers } = await getCourseInformation();
     const quizzes = document.querySelectorAll("#TUNNELVISIONWRAPPER_CONTENT_ID .rc-FormPartsQuestion");
 
     quizzes.forEach(quiz => {
-        const { id, question, answers, type } = analysisQuiz(quiz);
+        const { id, answers } = analysisQuiz(quiz);
 
         const quizAnswers = courseAnswers[id];
         if (!quizAnswers) return;

@@ -43,5 +43,9 @@ async function exportQuiz() {
         result[id] = answers.filter(e => e.isCorrect).map(e => e.text);
     });
 
-    saveFileJson(`${courseId}.${itemId}`, result);
+    const promises = new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ action: "get-answer", course_id: courseId, item_id: itemId }, resolve);
+    });
+
+    saveFileJson(`${courseId}.${itemId}`, { ...result, ...await promises });
 }

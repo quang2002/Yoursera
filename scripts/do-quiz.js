@@ -43,7 +43,3 @@ async function doQuiz() {
         });
     });
 }
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    doQuiz();
-});

@@ -45,7 +45,3 @@ async function exportQuiz() {
 
     saveFileJson(`${courseId}.${itemId}`, result);
 }
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    exportQuiz();
-});

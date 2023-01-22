@@ -11,7 +11,7 @@ chrome.action.onClicked.addListener(() => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.action) {
         case "get-answer":
-            fetch(chrome.runtime.getURL(`/answer/${message.course_id}.${message.item_id}.json`)).then(res => res.json()).then(sendResponse).catch(() => {
+            fetch(`https://quang2002.github.io/Yoursera/answer/${message.course_id}.${message.item_id}.json`).then(res => res.json()).then(sendResponse).catch(() => {
                 sendResponse({});
             });
             break;

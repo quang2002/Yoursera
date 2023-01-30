@@ -3,7 +3,7 @@ async function getCourseInformation() {
     return info;
 }
 
-function analysisQuiz(quiz) {
+function analysisQuizForExport(quiz) {
     const id = quiz.getAttribute("aria-labelledby");
     const question = quiz.querySelector(".rc-FormPartsQuestion__row .rc-FormPartsQuestion__contentCell");
     const answers = [];
@@ -38,7 +38,7 @@ async function exportQuiz() {
     const quizzes = document.querySelectorAll("#TUNNELVISIONWRAPPER_CONTENT_ID .rc-FormPartsQuestion");
 
     quizzes.forEach(quiz => {
-        const { id, answers } = analysisQuiz(quiz);
+        const { id, answers } = analysisQuizForExport(quiz);
 
         result[id] = answers.filter(e => e.isCorrect).map(e => e.text);
     });
